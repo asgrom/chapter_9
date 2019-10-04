@@ -1,3 +1,4 @@
+import os
 import re
 import string
 from collections import defaultdict
@@ -163,7 +164,7 @@ def parse_file(filename):
 
 
 if __name__ == '__main__':
-    import os
+    # import os
     import sys
 
     parse_file(os.path.abspath(sys.argv[1]))
