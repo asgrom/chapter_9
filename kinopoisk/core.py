@@ -35,7 +35,7 @@ def get_results(results_queue, filename):
         results_dict.update(result)
         results_queue.task_done()
     with open(filename, 'w') as f:
-        json.dump(results_dict, f, ensure_ascii=False, indent=4, sort_keys=results_dict.keys())
+        json.dump(results_dict, f, ensure_ascii=False, indent=4, sort_keys=True)
     results_queue.task_done()
 
 

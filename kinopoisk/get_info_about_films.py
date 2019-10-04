@@ -76,18 +76,18 @@ def reformat_string(text):
 def get_info(html):
     """Информация о фильме: режиссер, композитор, сборы и т.д."""
     try:
-        info_dict = defaultdict(dict)
+        info = []
         info_table = html.xpath('.//table[@class="info"]')[0]
         trs = info_table.xpath('.//tr')
         for tr in trs:
             tds = tr.xpath('.//td')
             key = tds[0].text.strip()
             values = reformat_string(tds[1].xpath('descendant-or-self::text()'))
-            info_dict['about'].update({key: values})
-        return info_dict
+            info.append((key, values))
+        return info
     except IndexError as e:
         # print(filename, '\n', str(e))
-        return dict(about='')
+        return ''
 
 
 def get_raiting(html):
@@ -141,6 +141,13 @@ def parse_file(filename):
     html = ht.parse(filename, parser=html_parser).getroot()
     title = html.xpath('.//title')[0].text
     title = re.match(r'^([^—]+) —.*', title).group(1)
+    try:
+        alternative_title = html.xpath('.//span[@itemprop="alternativeHeadline"]/text()')[0]
+        alternative_title = alternative_title.strip()
+    except Exception:
+        alternative_title = ''
+
+    info[title].update(dict(title1=alternative_title))
 
     # сводная информация о фильме
     info[title].update(get_info(html))
